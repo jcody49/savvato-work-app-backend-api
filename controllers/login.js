@@ -41,8 +41,8 @@ loginRouter.post('/', async(request, response) => {
     })
 
     response
-    .status(200)
-    .send({ username: registeredUser.username, name: registeredUser.name })
+        .status(200)
+        .send({ username: registeredUser.username, name: registeredUser.name })
 })
 
 
