@@ -5,14 +5,13 @@ const app = express();
 const cookieParser = require('cookie-parser')
 app.use(cookieParser())
 const middleware = require('./utils/middleware')
-app.use(middleware.tokenExtractor)
 const loginRouter = require('./controllers/login')
 const signupRouter = require('./controllers/signup')
 const stepsRouter = require('./controllers/stepsController')
 
+
 // Connect to MongoDB
 const mongoose = require('mongoose');
-const stepsRouter = require('./controllers/stepsController');
 
 const mongodb_uri = config.MONGODB_URI
 mongoose
@@ -23,12 +22,14 @@ mongoose
 // Middleware (very particular Order)
 app.use(express.json());  // to parse JSON
 app.use(middleware.requestLogger)  // logs details about HTTP requests
+app.use(middleware.tokenExtractor) 
+app.use(middleware.userExtractor) // User validation
 console.log('Middlewares loaded')
 
 // Route requests
-app.use('/public/login', loginRouter);
 app.use('/public/signup', signupRouter);
-app.use('/api/v1/step', stepsRouter)
+app.use('/public/login', loginRouter);
+app.use('/api/v1/steps', stepsRouter)
 console.log('Routes loaded')
 
 // Error Handling Middleware
