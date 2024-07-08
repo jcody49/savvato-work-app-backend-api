@@ -1,0 +1,34 @@
+####
+# @valid POST
+
+POST http://localhost:3003/api/v1/steps HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Acquire infinity stones",
+    "description": "Go to Nidavellier. Get Inifinty gauntlet. Call Thanos. Ask him to do the rest."
+}
+
+####
+# @valid POST
+
+POST http://localhost:3003/api/v1/steps HTTP/1.1
+content-type: application/json
+
+{
+    "name": "What a Step!",
+    "description": "This is the fooper step. Impeccable!"
+}
+
+####
+# @valid POST
+
+POST http://localhost:3003/api/v1/steps HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Fulfill Soul stone promise",
+    "description": "Meet someone on Tinder. Love them crazy. Dump them from Vormir. Get soul stone. Complete infinity gauntlet"
+}
+
+####
