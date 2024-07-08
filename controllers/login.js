@@ -23,14 +23,14 @@ loginRouter.post('/', async(request, response) => {
     // generate jwt for valid user
     const userToAuthenticate = {
         username: registeredUser.username,
-        id: registeredUser.id
+        id: registeredUser._id
     }
     // expires in 60 minutes
     const token = jwt.sign(
         userToAuthenticate, 
-        config.SECRET, {
-        expiresIn: 60 * 60    
-    })
+        config.SECRET, 
+        {expiresIn: 60 * 60}
+    )
     
     // use httpOnly cookie to wrap JWT
     response.cookie('auth_token', token, {
