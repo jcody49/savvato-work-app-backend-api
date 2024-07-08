@@ -13,12 +13,10 @@ const stepSchema = new mongoose.Schema({
         minLength: 10
     },
     // reference Users collection --> 1:M relationship (1 user-to-Many steps)
-    user : [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User'
-        }
-    ]
+    user : {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }
 })
 
 // transform DB fields in collection
