@@ -1,12 +1,23 @@
 ####
 # @valid login
 
-POST http://localhost:3007/public/login HTTP/1.1
+POST http://localhost:3003/public/login HTTP/1.1
 content-type: application/json
 
 {
     "username": "tester1",
     "password": "f!rE|ntHeH076"
+}
+
+####
+# @valid login
+
+POST http://localhost:3003/public/login HTTP/1.1
+content-type: application/json
+
+{
+    "username": "tester fooper",
+    "password": "f7ipP@tYf7aP"
 }
 
 ####
