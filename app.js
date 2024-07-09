@@ -22,13 +22,16 @@ mongoose
 // Middleware (very particular Order)
 app.use(express.json());  // to parse JSON
 app.use(middleware.requestLogger)  // logs details about HTTP requests
-app.use(middleware.tokenExtractor) 
-app.use(middleware.userExtractor) // User validation
+
 console.log('Middlewares loaded')
 
 // Route requests
 app.use('/public/signup', signupRouter);
 app.use('/public/login', loginRouter);
+
+app.use(middleware.tokenExtractor) 
+app.use(middleware.userExtractor) // User validation
+
 app.use('/api/v1/steps', stepsRouter)
 console.log('Routes loaded')
 
