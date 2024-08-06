@@ -5,6 +5,7 @@ const app = express();
 const cookieParser = require('cookie-parser')
 app.use(cookieParser())
 const middleware = require('./utils/middleware')
+app.use(middleware.tokenExtractor)
 const loginRouter = require('./controllers/login')
 const signupRouter = require('./controllers/signup')
 const stepsRouter = require('./controllers/stepsController')

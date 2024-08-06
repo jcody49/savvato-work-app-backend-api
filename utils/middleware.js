@@ -1,3 +1,4 @@
+require('dotenv').config()
 const morgan = require('morgan')
 const requestLogger = morgan('dev')
 const jwt = require('jsonwebtoken')
