@@ -6,43 +6,56 @@ const jwt = require('jsonwebtoken')
 const User = require('../models/user')
 const config = require('../utils/config')
 
-loginRouter.post('/', async(request, response) => {
+loginRouter.post('/', async(request, response, next) => {
     const { username, password } = request.body
-    const registeredUser = await User.findOne({ username: username })
-    if(!registeredUser){
-        throw new Error('User does not exist. Signup for access.')
-    }
+    try {
+        const registeredUser = await User.findOne({ username: username })
+        if(!registeredUser){
+            console.error('User does not exist. Signup for access.')
+            response
+                .status(401)
+                .send({ error: 'User does not exist. Signup for access.'})
+        }
     
-    const validPassword = password === null 
-        ? false 
-        : await bcrypt.compare(password, registeredUser.passwordHash)
-    if(!validPassword){
-        throw new Error('Invalid Password. Provide the associated password to username.')
-    }
+        const validPassword = password === null 
+            ? false 
+            : await bcrypt.compare(password, registeredUser.passwordHash)
+        if(!validPassword){
+            console.error('Invalid Password. Provide the associated password to username.')
+            response
+            .status(401)
+            .send({ error: 'Invalid Password. Provide the associated password to username.'})
+        }
 
-    // generate jwt for valid user
-    const userToAuthenticate = {
-        username: registeredUser.username,
-        id: registeredUser._id
-    }
-    // expires in 60 minutes
-    const token = jwt.sign(
-        userToAuthenticate, 
-        config.SECRET, 
-        {expiresIn: 60 * 60}
-    )
-    
-    // use httpOnly cookie to wrap JWT
-    response.cookie('auth_token', token, {
-        httpOnly: true,
-        secure: false, // true if https
-        maxAge: 60 * 60 * 1000, // match token expiresIn
-        sameSite: 'strict' // based on cross-site request needs
-    })
+        // generate jwt for valid user
+        const userToAuthenticate = {
+            username: registeredUser.username,
+            id: registeredUser._id
+        }
+        // expires in 60 minutes
+        const token = jwt.sign(
+            userToAuthenticate, 
+            config.SECRET, 
+            {expiresIn: 60 * 60}
+        )
+        
+        // use httpOnly cookie to wrap JWT
+        response.cookie('auth_token', token, {
+            httpOnly: true,
+            secure: false, // true if https
+            maxAge: 60 * 60 * 1000, // match token expiresIn
+            sameSite: 'strict' // based on cross-site request needs
+        })
 
-    response
-        .status(200)
-        .send({ username: registeredUser.username, name: registeredUser.name })
+        response
+            .status(200)
+            .send({ username: registeredUser.username, name: registeredUser.name })
+    }
+    catch (error) 
+    {
+        console.error('Error during Login: ', error)
+        
+    }
 })
 
 
