@@ -4,7 +4,7 @@ const userSchema = new mongoose.Schema({
     username: {
         type: String,
         required: true,
-        unqiue: true,
+        unique: true,
         minLength: 5
     },
     name: {
@@ -15,9 +15,17 @@ const userSchema = new mongoose.Schema({
     passwordHash: {
         type: String,
         required: true
-    }
+    },
+    // reference Steps collection via objectId --> 1:M(1 user-to-Many steps) relationship
+    steps: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Step'
+        }
+    ]
 })
 
+// transform DB fields in collection
 userSchema.set('toJSON', {
     transform: (document, returnedObject) => {
         returnedObject.id = returnedObject._id.toString()

@@ -3,6 +3,7 @@ const morgan = require('morgan')
 const requestLogger = morgan('dev')
 const jwt = require('jsonwebtoken')
 const User = require('../models/user')
+const config = require('./config')
 
 const unknownEndpoint = (request, response, next) => {
     response.status(404).send({ error: 'Unknown Endpoint' })
@@ -25,12 +26,18 @@ const tokenExtractor = (request, response, next) => {
 
 // validate user's JWT and authenticate user access - to be used in stepsController.js
 const userExtractor = async (request, response, next) => {
-    const decodedToken = jwt.verify(request.token, process.env.SECRET)
-    if(!decodedToken){
-        response.status(401).json({error: 'Invalid Token. User authentication failed.'})
+    try {
+        const decodedToken = jwt.verify(request.token, config.SECRET);
+        const user = await User.findById(decodedToken.id);
+        if (!user) {
+            return response.status(401).json({ error: 'User not found. Authentication failed.' });
+        }
+        request.user = user;
+        next();
+    } catch (error) {
+        console.error(error);
+        response.status(401).json({ error: 'Invalid Token. User authentication failed.' });
     }
-    request.user = await User.findById(decodedToken.id)
-    next()
 }
 
 // export to app
