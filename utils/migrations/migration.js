@@ -65,10 +65,6 @@ async function generateMigration() {
         if (changes.length > 0) {
             const migrationName = `update-${schemaName}-schema-${Date.now()}`;
 
-            const currDir = process.cwd();
-
-            // change dir to migrationScriptsDir
-            // process.chdir(migrationScriptsDir);
             exec(`npx migrate-mongo create ${migrationName} -f ${migrateMongoConfigPath}`, (error, stdout, stderr) => {
                 if (error) {
                     console.error(`Error creating migration file: ${error.message}`);
@@ -84,9 +80,6 @@ async function generateMigration() {
 
                 // Save the new schema as the old schema for future comparisons
                 fs.writeFileSync(oldSchemaPath, JSON.stringify(newSchema, null, 2), 'utf-8');
-
-                // change dir back to currDir
-                process.chdir(currDir);
             });
         } else {
             console.log(`No changes detected in the schema for ${schemaName}.`);
@@ -108,11 +101,6 @@ async function generateMigration() {
             continue;
         }
 
-        let currDir = process.cwd();
-
-        // change dir to migrationScriptsDir
-        // process.chdir(migrationScriptsDir);
-
         const migrationName = `add-test-data-${schemaName}-${Date.now()}`;
         exec(`npx migrate-mongo create ${migrationName} -f ${migrateMongoConfigPath}`, (error, stdout, stderr) => {
             if (error) {
@@ -126,9 +114,6 @@ async function generateMigration() {
 
             fs.writeFileSync(migrationFilePath, migrationContent, 'utf-8');
             console.log(`Migration file created: ${migrationFilePath}`);
-
-            // change dir back to currDir
-            process.chdir(currDir);
         });
     }
 
