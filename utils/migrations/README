@@ -1,0 +1,13 @@
+Migrations are created by the utils/migrations script. Just create your schema objects as you would like them, run the
+script, and it will generate a migration file for you. You can then run the migration file to update your database.
+
+
+To run from a clean slate, delete the migrations in the ./migrations directory (it has the README file), and delete
+the oldSchemas directory.
+
+
+# Generate the migration script
+WORKING_DIR=/home/jjames/src/mern-project/savvato-work-app-backend-api/utils node utils/migrations/migration.js
+
+# Run the migration script
+npx migrate-mongo up -f /home/jjames/src/mern-project/savvato-work-app-backend-api/utils/migrations/migrate-mongo-config.js
