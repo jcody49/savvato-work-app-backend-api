@@ -28,14 +28,20 @@ if (!fs.existsSync(migrationScriptsDir)) {
     fs.mkdirSync(migrationScriptsDir);
 }
 
+if (!fs.existsSync(migrationScriptsDir + '/schemas')) {
+    fs.mkdirSync(migrationScriptsDir + '/schemas');
+}
+
+if (!fs.existsSync(migrationScriptsDir + '/test-data')) {
+    fs.mkdirSync(migrationScriptsDir + '/test-data');
+}
+
 async function generateMigration() {
     await mongoose.connect(migrateMongoConfig.mongodb.url, migrateMongoConfig.mongodb.options);
     console.log('Connected to MongoDB');
 
     const schemaFiles = fs.readdirSync(schemasDir);
     const testDataFiles = fs.readdirSync(testDataModelsDir);
-
-    console.log("schemaFiles " + JSON.stringify(schemaFiles));
 
     // Process main schema files
     for (const file of schemaFiles) {
@@ -65,18 +71,25 @@ async function generateMigration() {
         if (changes.length > 0) {
             const migrationName = `update-${schemaName}-schema-${Date.now()}`;
 
-            exec(`npx migrate-mongo create ${migrationName} -f ${migrateMongoConfigPath}`, (error, stdout, stderr) => {
+            const currDir = process.cwd();
+
+            // change dir to migrationScriptsDir
+            process.chdir(migrationScriptsDir + '/schemas');
+            exec(`npx migrate-mongo create ${migrationName} -f ${migrateMongoConfigPath} -md .`, (error, stdout, stderr) => {
                 if (error) {
                     console.error(`Error creating migration file: ${error.message}`);
                     return;
                 }
 
-                const migrationFileName = stdout.match(/migrations\/scripts\/(\d+-.*\.js)/)[1];
-                const migrationFilePath = migrationScriptsDir + `/${migrationFileName}`;
+                const migrationFileName = stdout.match(/\/(\d+-.*\.js)/)[1];
+                const migrationFilePath = migrationScriptsDir + `/schemas/${migrationFileName}`;
                 const migrationContent = generateMigrationContent(schemaName, changes);
 
                 fs.writeFileSync(migrationFilePath, migrationContent, 'utf-8');
                 console.log(`Migration file created: ${migrationFilePath}`);
+
+                // change dir back to currDir
+                process.chdir(currDir);
 
                 // Save the new schema as the old schema for future comparisons
                 fs.writeFileSync(oldSchemaPath, JSON.stringify(newSchema, null, 2), 'utf-8');
@@ -101,16 +114,29 @@ async function generateMigration() {
             continue;
         }
 
+        let currDir = process.cwd();
+
+        // change dir to migrationScriptsDir
+        process.chdir(migrationScriptsDir + '/test-data');
+
         const migrationName = `add-test-data-${schemaName}-${Date.now()}`;
-        exec(`npx migrate-mongo create ${migrationName} -f ${migrateMongoConfigPath}`, (error, stdout, stderr) => {
+        exec(`npx migrate-mongo create ${migrationName} -f ${migrateMongoConfigPath} -md .`, (error, stdout, stderr) => {
             if (error) {
                 console.error(`Error creating migration file: ${error.message}`);
                 return;
             }
 
-            const migrationFileName = stdout.match(/migrations\/scripts\/(\d+-.*\.js)/)[1];
-            const migrationFilePath = migrationScriptsDir + `/${migrationFileName}`;
+            const migrationFileName = stdout.match(/\/(\d+-.*\.js)/)[1];
+            const migrationFilePath = migrationScriptsDir + `/test-data/${migrationFileName}`;
             const migrationContent = generateTestDataMigrationContent(schemaName, testData);
+
+            // change dir back to currDir
+            process.chdir(currDir);
+
+            // the migrationScriptsDir/test-data directory should be emptied. Only one test data migration file should be present at a time.
+            fs.readdirSync(migrationScriptsDir + '/test-data').forEach(file => {
+                fs.unlinkSync(migrationScriptsDir + '/test-data/' + file);
+            });
 
             fs.writeFileSync(migrationFilePath, migrationContent, 'utf-8');
             console.log(`Migration file created: ${migrationFilePath}`);
