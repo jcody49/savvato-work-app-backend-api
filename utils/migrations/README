@@ -6,9 +6,6 @@ To run from a clean slate, delete the migrations in the ./migrations directory (
 the oldSchemas directory.
 
 
-# Generate the migration script
-WORKING_DIR=/home/jjames/src/mern-project/savvato-work-app-backend-api/utils/ node utils/migrations/migration.js
+# Generate and Apply the migration scripts
+WORKING_DIR=/home/jjames/src/mern-project/savvato-work-app-backend-api/utils/ node utils/migrations/migrations.js
 
-# Run the migration script
-npx migrate-mongo up -f /home/jjames/src/mern-project/savvato-work-app-backend-api/utils/migrations/migrate-mongo-config.js -md /home/jjames/src/mern-project/savvato-work-app-backend-api/utils/migrations/scripts/schemas
-npx migrate-mongo up -f /home/jjames/src/mern-project/savvato-work-app-backend-api/utils/migrations/migrate-mongo-config.js -md /home/jjames/src/mern-project/savvato-work-app-backend-api/utils/migrations/scripts/test-data
