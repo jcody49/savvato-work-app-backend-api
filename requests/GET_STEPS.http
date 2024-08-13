@@ -1,0 +1,14 @@
+####
+
+# @valid GET all steps
+
+GET http://localhost:3003/api/v1/steps
+
+####
+
+# @valid GET by user id
+
+GET http://localhost:3003/localhost:3003/api/v1/steps/668c009a5965961cf7741ffb
+# need to debug
+
+####

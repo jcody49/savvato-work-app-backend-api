@@ -8,6 +8,7 @@ const middleware = require('./utils/middleware')
 app.use(middleware.tokenExtractor)
 const loginRouter = require('./controllers/login')
 const signupRouter = require('./controllers/signup')
+const stepsRouter = require('./controllers/stepsController')
 
 
 // Connect to MongoDB
@@ -22,11 +23,17 @@ mongoose
 // Middleware (very particular Order)
 app.use(express.json());  // to parse JSON
 app.use(middleware.requestLogger)  // logs details about HTTP requests
+
 console.log('Middlewares loaded')
 
 // Route requests
-app.use('/public/login', loginRouter);
 app.use('/public/signup', signupRouter);
+app.use('/public/login', loginRouter);
+
+app.use(middleware.tokenExtractor) 
+app.use(middleware.userExtractor) // User validation
+
+app.use('/api/v1/steps', stepsRouter)
 console.log('Routes loaded')
 
 // Error Handling Middleware
@@ -37,4 +44,3 @@ console.log('Error handlers loaded')
 
 // export to index
 module.exports = app
-

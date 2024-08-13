@@ -1,5 +1,5 @@
 ####
-# @valid signup
+# @valid
 POST http://localhost:3003/public/signup HTTP/1.1
 content-type: application/json
 
@@ -10,4 +10,17 @@ content-type: application/json
 }
 
 ####
-# @invalid signup
+# @valid
+
+POST http://localhost:3003/public/signup HTTP/1.1
+content-type: application/json
+
+{
+    "username": "tester fooper",
+    "name": "fooper",
+    "password": "f7ipP@tYf7aP"
+}
+
+####
+
+# @invalid

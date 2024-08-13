@@ -10,4 +10,15 @@ content-type: application/json
 }
 
 ####
+# @valid login
+
+POST http://localhost:3003/public/login HTTP/1.1
+content-type: application/json
+
+{
+    "username": "tester fooper",
+    "password": "f7ipP@tYf7aP"
+}
+
+####
 # @invalid login
