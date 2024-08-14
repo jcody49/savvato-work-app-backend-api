@@ -5,7 +5,6 @@ const { exec } = require('child_process');
 
 // Change the working directory based on an environment variable, if provided
 const workingDir = process.env.WORKING_DIR || process.cwd();
-console.log(`Working directory: ${workingDir}`);
 process.chdir(workingDir);
 
 // directories for migrate-mongo
@@ -39,7 +38,6 @@ if (!fs.existsSync(migrationScriptsDir + '/test-data')) {
 
 async function generateMigration() {
     await mongoose.connect(migrateMongoConfig.mongodb.url, migrateMongoConfig.mongodb.options);
-    console.log('Connected to MongoDB');
 
     const schemaFiles = fs.readdirSync(schemasDir);
     const testDataFiles = fs.readdirSync(testDataModelsDir);
@@ -213,7 +211,5 @@ function generateTestDataMigrationContent(schemaName, testData) {
     },
   };`
 }
-
-// generateMigration();
 
 module.exports = { generateMigration };
