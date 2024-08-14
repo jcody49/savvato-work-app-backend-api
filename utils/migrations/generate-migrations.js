@@ -44,6 +44,8 @@ async function generateMigration() {
     const schemaFiles = fs.readdirSync(schemasDir);
     const testDataFiles = fs.readdirSync(testDataModelsDir);
 
+    let currDir = process.cwd();
+
     // Process main schema files
     for (const file of schemaFiles) {
         const schemaName = path.basename(file, '.js');
@@ -71,8 +73,6 @@ async function generateMigration() {
 
         if (changes.length > 0) {
             const migrationName = `update-${schemaName}-schema-${Date.now()}`;
-
-            const currDir = process.cwd();
 
             // change dir to migrationScriptsDir
             process.chdir(migrationScriptsDir + '/schemas');
