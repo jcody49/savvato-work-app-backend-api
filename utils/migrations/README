@@ -1,0 +1,9 @@
+Migrations are created by the utils/migrations script. Just create your schema objects as you would like them, run the script, and it will set the schema and/or test data in the database for you.
+
+
+To run from a clean slate, delete the migrations in the ./migrations/scripts directory, and delete the oldSchemas directory.
+
+
+# Generate and Apply the migration scripts
+WORKING_DIR=/home/jjames/src/mern-project/savvato-work-app-backend-api/utils/ node utils/migrations/migrations.js
+

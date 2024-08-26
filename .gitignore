@@ -2,3 +2,7 @@
 .idea/
 node_modules/
 package-lock.json
+
+utils/migrations/scripts
+utils/oldSchemas
+
