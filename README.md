@@ -6,3 +6,7 @@
     - Outline the set of actions to complete a project
     - Suggest possible *Professionals* who can complete all/some of the outlined actions
     - Generate a Project Document to follow-up on the actions (*who did what and when*)
+
+# Development
+- Run the backend using `npm run dev`
+
