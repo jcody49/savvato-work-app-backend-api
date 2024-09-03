@@ -38,15 +38,9 @@ loginRouter.post('/', async(request, response, next) => {
             config.SECRET, 
             {expiresIn: 60 * 60}
         )
-        
-        // use httpOnly cookie to wrap JWT
-        response.cookie('auth_token', token, {
-            httpOnly: true,
-            secure: false, // true if https
-            maxAge: 60 * 60 * 1000, // match token expiresIn
-            sameSite: 'strict' // based on cross-site request needs
-        })
 
+        response.header('Authorization', token);
+        
         response
             .status(200)
             .send({ username: registeredUser.username, name: registeredUser.name })
