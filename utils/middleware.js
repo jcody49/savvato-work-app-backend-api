@@ -20,7 +20,7 @@ const errorHandler = (error, request, response, next) => {
 
 // retrieve token from httpOnly cookie
 const tokenExtractor = (request, response, next) => {
-    request.token = request.cookies['auth_token']
+    request.token = request.headers.authorization
     next()
 }
 
